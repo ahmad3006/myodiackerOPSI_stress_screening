@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyoDiacker Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header>
+        <h1>MyoDiacker Dashboard</h1>
+        <p>Real-time stress screening for students using physiological signals and social media text.</p>
+    </header>
+    <main>
+        <section class="status-card" id="statusCard">
+            <h2>Status Skrining</h2>
+            <div class="status-value" id="stressState">Menunggu data...</div>
+        </section>
+        <section class="metrics">
+            <div class="metric-card">
+                <h3>EMG RMS</h3>
+                <p id="emgValue">-</p>
+            </div>
+            <div class="metric-card">
+                <h3>HRV SDNN</h3>
+                <p id="hrvValue">-</p>
+            </div>
+            <div class="metric-card">
+                <h3>GSR Tonic</h3>
+                <p id="gsrValue">-</p>
+            </div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+
+</html>

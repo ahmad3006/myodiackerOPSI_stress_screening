@@ -1,0 +1,41 @@
+:root {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    padding: 24px;
+    background: #1d4ed8;
+    color: white;
+}
+
+main {
+    padding: 24px;
+}
+
+.status-card,
+.metric-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    margin-bottom: 16px;
+    padding: 18px;
+}
+
+.status-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.metrics {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
