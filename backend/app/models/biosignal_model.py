@@ -1,29 +1,32 @@
-import os
+"""Loader Random Forest untuk fitur EMG, HRV, GSR."""
+
+from __future__ import annotations
+
 import pickle
-import random
 
-MODEL_PATH = "app/data/biosignal_rf.pkl"
+import pandas as pd
 
-class DummyBiosignalModel:
-    def predict_proba(self, X):
-        result = []
-        for row in X:
-            score = sum(row) / max(1.0, len(row))
-            score = min(max(score, 0.0), 1.0)
-            result.append([1.0 - score, score])
-        return result
+from app.data.paths import BIO_FEATURES, RF_MODEL_PATH
+
 
 class BiosignalModel:
-    def __init__(self):
+    def __init__(self) -> None:
         self.model = None
 
     def load_model(self):
         if self.model is None:
-            if os.path.exists(MODEL_PATH):
-                with open(MODEL_PATH, "rb") as f:
-                    self.model = pickle.load(f)
-            else:
-                self.model = DummyBiosignalModel()
-        return self.model
+            if not RF_MODEL_PATH.exists():
+                raise FileNotFoundError(
+                    f"Model belum ada: {RF_MODEL_PATH}. Jalankan train_models.py dulu."
+                )
+            with open(RF_MODEL_PATH, "rb") as f:
+                self.model = pickle.load(f)
+        return self
+
+    def predict_proba(self, emg: float, hrv: float, gsr: float):
+        self.load_model()
+        X = pd.DataFrame([[float(emg), float(hrv), float(gsr)]], columns=BIO_FEATURES)
+        return self.model.predict_proba(X)[0]
+
 
 biosignal_model = BiosignalModel()

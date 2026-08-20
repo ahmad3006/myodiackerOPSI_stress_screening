@@ -1,31 +1,34 @@
-import os
+"""Loader TF-IDF + Multinomial Naive Bayes untuk teks Bahasa Indonesia."""
+
+from __future__ import annotations
+
 import pickle
-import random
 
-MODEL_PATH = "app/data/text_nb.pkl"
+from app.data.paths import NB_MODEL_PATH, TFIDF_PATH
 
-class DummyTextModel:
-    def predict_proba(self, X):
-        result = []
-        for row in X:
-            score = 0.5
-            if len(row) > 0:
-                score = sum(row) / max(1.0, len(row))
-            score = min(max(score, 0.0), 1.0)
-            result.append([1.0 - score, score])
-        return result
 
 class TextModel:
-    def __init__(self):
+    def __init__(self) -> None:
         self.model = None
+        self.vectorizer = None
 
     def load_model(self):
-        if self.model is None:
-            if os.path.exists(MODEL_PATH):
-                with open(MODEL_PATH, "rb") as f:
-                    self.model = pickle.load(f)
-            else:
-                self.model = DummyTextModel()
-        return self.model
+        if self.model is None or self.vectorizer is None:
+            if not NB_MODEL_PATH.exists() or not TFIDF_PATH.exists():
+                raise FileNotFoundError(
+                    "Model NLP belum ada. Jalankan train_models.py untuk membuat "
+                    f"{NB_MODEL_PATH.name} dan {TFIDF_PATH.name}."
+                )
+            with open(NB_MODEL_PATH, "rb") as f:
+                self.model = pickle.load(f)
+            with open(TFIDF_PATH, "rb") as f:
+                self.vectorizer = pickle.load(f)
+        return self
+
+    def predict_proba(self, text_post: str):
+        self.load_model()
+        X = self.vectorizer.transform([text_post or ""])
+        return self.model.predict_proba(X)[0]
+
 
 text_model = TextModel()

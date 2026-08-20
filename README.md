@@ -55,13 +55,15 @@ Proyek MyoDiacker adalah sistem skrining stres siswa berbasis portable dan multi
 4. `backend/`:
    - Buat virtual environment Python.
    - Install dependencies: `pip install -r requirements.txt`.
-   - Jalankan: `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`.
+   - Latih model dummy + demo inference: `python run_myodiacker.py`
+   - Jalankan API: `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`.
+   - Endpoint: `POST /api/predict` dengan JSON `{ "emg", "hrv", "gsr", "text_post" }`.
 5. `frontend/`:
    - Buka `frontend/index.html` dengan Live Server, atau host statis.
    - Pastikan `app.js` memanggil backend di `http://localhost:8000/api/fuse`.
 
 ## Catatan
 
-- Semua modul saat ini masih berupa boilerplate/stub; logika sensor dan model harus diimplementasikan sesuai hardware dan dataset nyata.
-- Backend menggunakan file pickle model sebagai placeholder di `app/data/`.
-- Untuk integrasi akhir, sensor ESP32 dapat mengirim JSON ke backend via Wi-Fi atau BLE dan dashboard menerima hasilnya.
+- Backend sudah dilatih dengan data dummy sintetis (`rf_biosensor.pkl`, `tfidf.pkl`, `nb_nlp.pkl`).
+- Inference utama: `predict_stress(emg, hrv, gsr, text_post=None)` di `backend/app/decision_fusion.py`.
+- Firmware ESP32 masih stub; ganti argumen `predict_stress` dengan JSON Serial saat alat siap.
