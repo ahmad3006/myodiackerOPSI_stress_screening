@@ -17,10 +17,15 @@ function renderState(data) {
     const hrvEl = document.getElementById("hrvValue");
     const gsrEl = document.getElementById("gsrValue");
 
-    stateEl.textContent = `${data.decision} (Dummy Mode)`;
-    emgEl.textContent = data.details?.emg_rms ?? "-";
-    hrvEl.textContent = data.details?.hrv_sdnn ?? "-";
-    gsrEl.textContent = data.details?.gsr_tonic ?? "-";
+    const fusion = data.details || {};
+    const input = fusion.details?.input || fusion.input || {};
+    const label = fusion.color
+        ? `${fusion.color} / ${fusion.level}`
+        : `${data.decision}`;
+    stateEl.textContent = `${label} (Dummy Mode)`;
+    emgEl.textContent = input.emg ?? "-";
+    hrvEl.textContent = input.hrv ?? "-";
+    gsrEl.textContent = input.gsr ?? "-";
 }
 
 function renderDummyState() {
@@ -36,8 +41,8 @@ function renderDummyState() {
 
 async function initDashboard() {
     const demoPayload = {
-        biosignal: { emg_rms: 0.24, hrv_sdnn: 0.12, gsr_tonic: 0.22 },
-        text_features: { text_vector: { stress: 0.1, anxious: 0.2 } }
+        biosignal: { emg: 0.24, hrv: 72.0, gsr: 3.1 },
+        text_features: { text_post: "belajar dengan tenang" }
     };
 
     try {
